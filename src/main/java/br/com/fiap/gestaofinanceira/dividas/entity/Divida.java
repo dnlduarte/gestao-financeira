@@ -36,20 +36,20 @@ import java.util.List;
 public class Divida {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "ID", length = 36)
+    private String id;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ID_TIPO", nullable = false)
     private TipoDivida tipo;
 
-    // Tabela de OUTRO modulo (Pessoas): guarda so o id, sem @ManyToOne
-    @NotNull
-    @Positive
-    @Column(name = "ID_PESSOA", nullable = false)
-    private Long idPessoa;
+    // Tabela de OUTRO modulo (01 - Pessoas, TB_PES_USUARIO): guarda so o id, sem @ManyToOne
+    @NotBlank
+    @Size(max = 36)
+    @Column(name = "ID_PESSOA", nullable = false, length = 36)
+    private String idPessoa;
 
     @NotBlank
     @Size(max = 150)

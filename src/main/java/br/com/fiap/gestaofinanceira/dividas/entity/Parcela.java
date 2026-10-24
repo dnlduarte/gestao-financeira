@@ -13,6 +13,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,19 +29,19 @@ import java.time.LocalDate;
 public class Parcela {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "ID", length = 36)
+    private String id;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ID_DIVIDA", nullable = false)
     private Divida divida;
 
-    // Tabela de OUTRO modulo (Contas): guarda so o id, sem @ManyToOne
-    @Positive
-    @Column(name = "ID_CONTA")
-    private Long idConta;
+    // Tabela de OUTRO modulo (02 - Contas, TB_CTA_CONTA): guarda so o id, sem @ManyToOne
+    @Size(max = 36)
+    @Column(name = "ID_CONTA", length = 36)
+    private String idConta;
 
     @NotNull
     @Positive

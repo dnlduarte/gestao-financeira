@@ -24,9 +24,9 @@ import java.util.List;
 public class TipoDivida {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "ID", length = 36)
+    private String id;
 
     @NotBlank
     @Size(max = 100)
