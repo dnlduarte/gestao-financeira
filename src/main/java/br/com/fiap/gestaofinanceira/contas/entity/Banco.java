@@ -28,13 +28,13 @@ public class Banco {
     @Column(name = "ID", length = 36)
     private String id;
 
-    @NotBlank
-    @Pattern(regexp = "\\d{3}", message = "deve ter 3 digitos")
+    @NotBlank(message = "O código do banco é obrigatório")
+    @Pattern(regexp = "\\d{3}", message = "O código do banco deve ter 3 dígitos (ex.: 001)")
     @Column(name = "CODIGO", nullable = false, length = 3)
     private String codigo;
 
-    @NotBlank
-    @Size(max = 100)
+    @NotBlank(message = "O nome do banco é obrigatório")
+    @Size(max = 100, message = "O nome do banco deve ter no máximo 100 caracteres")
     @Column(name = "NOME", nullable = false, length = 100)
     private String nome;
 }

@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -35,25 +36,33 @@ public class ChavePix {
     @Column(name = "ID", length = 36)
     private String id;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    // EAGER: a conta aparece no JSON e o open-in-view esta desligado.
+    @NotNull(message = "A conta é obrigatória: informe \"conta\": { \"id\": \"...\" }")
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "ID_CONTA", nullable = false)
     private ContaBancaria conta;
 
-    @NotNull
+    @NotNull(message = "O tipo da chave é obrigatório (CPF, EMAIL, TELEFONE ou ALEATORIA)")
     @Enumerated(EnumType.STRING)
     @Column(name = "TIPO", nullable = false, length = 20)
     private TipoChavePix tipo;
 
-    @NotBlank
-    @Size(max = 77)
+    @NotBlank(message = "O valor da chave é obrigatório")
+    @Size(max = 77, message = "O valor da chave deve ter no máximo 77 caracteres")
     @Column(name = "VALOR", nullable = false, length = 77)
     private String valor;
 
-    @NotNull
+    @NotNull(message = "Informe se a chave está ativa (true ou false)")
     @Column(name = "ATIVA", nullable = false)
     private Boolean ativa = Boolean.TRUE;
 
-    @Column(name = "CRIADO_EM", nullable = false, insertable = false, updatable = false)
+    @Column(name = "CRIADO_EM", nullable = false, updatable = false)
     private LocalDateTime criadoEm;
+
+    @PrePersist
+    void preencherCriadoEm() {
+        if (criadoEm == null) {
+            criadoEm = LocalDateTime.now();
+        }
+    }
 }
