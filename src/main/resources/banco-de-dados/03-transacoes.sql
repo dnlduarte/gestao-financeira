@@ -23,8 +23,8 @@ COMMENT ON COLUMN TB_TRN_CATEGORIA.TIPO_PADRAO  IS 'Tipo padrao: RECEITA ou DESP
 
 -- ---------------------------------------------------------------------
 -- TB_TRN_TRANSACAO: receitas e despesas (coluna TIPO e o discriminador)
--- ID_PESSOA  -> modulo 01 (TB_PES_*)
--- ID_CONTA   -> modulo 02 (TB_CTA_*)
+-- ID_PESSOA  -> modulo 01 (TB_PES_USUARIO)
+-- ID_CONTA   -> modulo 02 (TB_CTA_CONTA)
 -- ---------------------------------------------------------------------
 CREATE TABLE TB_TRN_TRANSACAO (
     ID              VARCHAR2(36)   NOT NULL,
@@ -40,12 +40,11 @@ CREATE TABLE TB_TRN_TRANSACAO (
     CONSTRAINT PK_TRN_TRANSACAO PRIMARY KEY (ID),
     CONSTRAINT FK_TRN_TRANSACAO_CATEGORIA FOREIGN KEY (ID_CATEGORIA)
         REFERENCES TB_TRN_CATEGORIA (ID),
-    -- TODO: descomentar apos combinar com os grupos 8 (Pessoas) e 2 (Contas)
-    --       o nome real da tabela e da PK (ver mural da Entrega 1):
-    -- CONSTRAINT FK_TRN_TRANSACAO_PESSOA FOREIGN KEY (ID_PESSOA)
-    --     REFERENCES TB_PES_PESSOA (ID),
-    -- CONSTRAINT FK_TRN_TRANSACAO_CONTA FOREIGN KEY (ID_CONTA)
-    --     REFERENCES TB_CTA_CONTA (ID),
+    -- Tabelas dos grupos 8 (Pessoas) e 2 (Contas), ja integradas na development
+    CONSTRAINT FK_TRN_TRANSACAO_PESSOA FOREIGN KEY (ID_PESSOA)
+        REFERENCES TB_PES_USUARIO (ID),
+    CONSTRAINT FK_TRN_TRANSACAO_CONTA FOREIGN KEY (ID_CONTA)
+        REFERENCES TB_CTA_CONTA (ID),
     CONSTRAINT CK_TRN_TRANSACAO_VALOR CHECK (VALOR > 0),
     CONSTRAINT CK_TRN_TRANSACAO_TIPO  CHECK (TIPO IN ('RECEITA', 'DESPESA')),
     CONSTRAINT CK_TRN_TRANSACAO_PAGA  CHECK (PAGA IN (0, 1))

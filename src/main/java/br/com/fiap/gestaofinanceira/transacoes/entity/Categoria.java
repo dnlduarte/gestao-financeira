@@ -1,4 +1,4 @@
-package br.com.fiap.gestaofinanceira.transacoes.entites;
+package br.com.fiap.gestaofinanceira.transacoes.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
