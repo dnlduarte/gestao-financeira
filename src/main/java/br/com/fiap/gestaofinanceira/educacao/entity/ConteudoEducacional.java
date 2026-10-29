@@ -45,25 +45,30 @@ import lombok.Setter;
 @NoArgsConstructor
 public abstract class ConteudoEducacional {
 
+    /** Identificador único do conteúdo (UUID gerado automaticamente). */
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "ID", length = 36)
     private String id;
 
+    /** Título do conteúdo. */
     @NotBlank(message = "O título do conteúdo é obrigatório")
     @Size(max = 150, message = "O título deve ter no máximo 150 caracteres")
     @Column(name = "TITULO", nullable = false, length = 150)
     private String titulo;
 
+    /** Descrição resumida do conteúdo. */
     @Size(max = 500, message = "A descrição deve ter no máximo 500 caracteres")
     @Column(name = "DESCRICAO", length = 500)
     private String descricao;
 
+    /** Nível de conhecimento exigido pelo conteúdo. */
     @NotNull(message = "Informe o nível do conteúdo: INICIANTE, INTERMEDIARIO ou AVANCADO")
     @Enumerated(EnumType.STRING)
     @Column(name = "NIVEL", nullable = false, length = 20)
     private NivelConhecimento nivel;
 
+    /** Indica se o conteúdo está ativo. */
     // Opcional no cadastro: se nao vier, o Service grava como ativo
     @Column(name = "ATIVO", nullable = false)
     private Boolean ativo;
