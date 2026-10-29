@@ -35,17 +35,20 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class ProgressoUsuario {
 
+    /** Identificador único do progresso (UUID gerado automaticamente). */
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "ID", length = 36)
     private String id;
 
+    /** Id do usuário dono do progresso. */
     // Tabela de OUTRO modulo (01 - Pessoas, TB_PES_USUARIO): guarda so o id, sem @ManyToOne
     @NotBlank(message = "Informe o id do usuário (idUsuario)")
     @Size(max = 36, message = "O id do usuário deve ter no máximo 36 caracteres")
     @Column(name = "ID_USUARIO", nullable = false, length = 36)
     private String idUsuario;
 
+    /** Conteúdo educacional ao qual o progresso se refere. */
     // Mesmo modulo: @ManyToOne EAGER para o conteudo aparecer no JSON (open-in-view desligado).
     // So aparece na resposta; no corpo da requisicao o conteudo vem pelo campo "idConteudo".
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -53,6 +56,7 @@ public class ProgressoUsuario {
     @JoinColumn(name = "ID_CONTEUDO", nullable = false)
     private ConteudoEducacional conteudo;
 
+    /** Id do conteúdo, usado apenas no cadastro (não é salvo no banco). */
     // Como ConteudoEducacional e abstrata, "conteudo": { "id": "..." } exigiria tambem o "tipo".
     // Por isso o cadastro recebe so o id; o Service busca o conteudo antes de salvar.
     @Transient
@@ -60,22 +64,26 @@ public class ProgressoUsuario {
     @NotBlank(message = "Informe o id do conteúdo (idConteudo)")
     private String idConteudo;
 
+    /** Situação atual do usuário no conteúdo. */
     @NotNull(message = "Informe o status: NAO_INICIADO, EM_ANDAMENTO ou CONCLUIDO")
     @Enumerated(EnumType.STRING)
     @Column(name = "STATUS", nullable = false, length = 20)
     private StatusProgresso status;
 
+    /** Percentual já concluído, de 0 a 100. */
     @NotNull(message = "O percentual concluído é obrigatório")
     @Min(value = 0, message = "O percentual não pode ser menor que 0")
     @Max(value = 100, message = "O percentual não pode ser maior que 100")
     @Column(name = "PERCENTUAL", nullable = false)
     private Integer percentual;
 
+    /** Data em que o usuário iniciou o conteúdo. */
     @NotNull(message = "A data de início é obrigatória (aaaa-mm-dd)")
     @PastOrPresent(message = "A data de início não pode estar no futuro")
     @Column(name = "DATA_INICIO", nullable = false)
     private LocalDate dataInicio;
 
+    /** Data em que o usuário concluiu o conteúdo (opcional). */
     @PastOrPresent(message = "A data de conclusão não pode estar no futuro")
     @Column(name = "DATA_CONCLUSAO")
     private LocalDate dataConclusao;
